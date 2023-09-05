@@ -1,0 +1,97 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: test
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 60
+    MemorySize: 768
+    Runtime: nodejs18.x
+
+Parameters:
+  StackName:
+    Type: String
+    Default: 'TestStack'
+  RoleName:
+    Type: String
+    Default: 'TestRole'
+  PolicyName:
+    Type: String
+    Default: 'TestPolicy'
+
+
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref RoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: !Ref PolicyName
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+                Resource: '*'
+
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      MinimumCompressionSize: 0
+      OpenApiVersion: 3.0.1
+      DefinitionUri: ./template_api.yaml
+      StageName: Test
+      TracingEnabled: false
+      CacheClusterEnabled: false
+      MethodSettings:
+        - DataTraceEnabled: true
+          HttpMethod: '*'
+          LoggingLevel: ERROR
+          ResourcePath: '/*'
+          MetricsEnabled: true
+      Variables:
+        ServerlessLambdaFunctionName: !Ref LambdaApiFunction
+
+  LambdaApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: ai api
+      FunctionName: 'test'
+      CodeUri: ./
+      Handler: dist/lambda.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        health:
+          Type: Api
+          Properties:
+            Path: '/health'
+            Method: GET
+            RestApiId: !Ref Api
+#        carCheck:
+#          Type: Api
+#          Properties:
+#            Path: '/car-check'
+#            Method: GET
+#            RestApiId: !Ref Api
+        proxy:
+          Type: Api
+          Properties:
+            Path: '/{proxy+}'
+            Method: ANY
+            RestApiId: !Ref Api

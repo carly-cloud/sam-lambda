@@ -1,0 +1,93 @@
+{
+  "dependencies": {
+    "@sentry/serverless": "^7.64.0",
+    "@sentry/tracing": "^7.64.0",
+    "@vendia/serverless-express": "^4.10.1",
+    "aws-lambda": "^1.0.7",
+    "axios": "^1.2.1",
+    "body-parser": "^1.20.2",
+    "compression": "^1.7.4",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
+    "i18next": "^23.4.4",
+    "i18next-fs-backend": "^2.1.5",
+    "i18next-http-middleware": "^3.3.2",
+    "jsonwebtoken": "^9.0.1"
+  },
+  "description": "carly html-report-generator",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "@types/compression": "^1.7.2",
+    "@types/i18next-fs-backend": "^1.1.2",
+    "@types/jest": "^29.5.3",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/node": "^20.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "concurrently": "^8.2.0",
+    "css-loader": "^6.8.1",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "husky": "^8.0.2",
+    "jest": "^29.6.2",
+    "jest-junit": "^16.0.0",
+    "lint-staged": "^14.0.0",
+    "mini-css-extract-plugin": "^2.7.5",
+    "npm-check": "^6.0.1",
+    "prettier": "^3.0.2",
+    "sass": "^1.65.1",
+    "sass-loader": "^13.3.2",
+    "sass-rem": "^3.0.0",
+    "source-map-support": "^0.5.21",
+    "stylelint": "^15.10.2",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-recommended-scss": "^12.0.0",
+    "ts-jest": "^29.1.1",
+    "ts-loader": "^9.4.4",
+    "ts-node": "^10.6.0",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-bundle-analyzer": "^4.9.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "lint-staged": {
+    "app/**/*.scss": [
+      "stylelint"
+    ],
+    "app/**/*.ts": [
+      "eslint",
+      "prettier"
+    ],
+    "src/**/*.ts": [
+      "eslint",
+      "prettier"
+    ],
+    "src/*.ts": [
+      "eslint",
+      "prettier"
+    ]
+  },
+  "name": "lambda-html-report-generator",
+  "scripts": {
+    "build": "tsc",
+    "dev": "sam local start-api --env-vars env.json",
+    "fix": "npm run fix:prettier && npm run fix:eslint && npm run fix:stylelint",
+    "fix:eslint": "eslint --fix src/**/*.ts",
+    "fix:prettier": "prettier --write src/**/*.ts",
+    "fix:stylelint": "stylelint --fix 'app/**/*.scss'",
+    "lint": "lint:eslint && lint:prettier",
+    "lint:eslint": "eslint *.js",
+    "lint:prettier": "prettier --check **/**.{ts,js}",
+    "prepare": "npx husky install",
+    "test": "jest src/**/*.test.ts --detectOpenHandles --coverage --collectCoverage --bail  --ci --reporters=default --reporters=jest-junit --watchAll=false",
+    "update": "./node_modules/npm-check/bin/cli.js --update-all",
+    "watch": "concurrently --names \"Backend,Client\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run watch:backend\" \"npm run watch:client\"",
+    "watch:backend": "tsc -w",
+    "watch:client": "npx webpack --config webpack.config.js --mode=development --watch"
+  },
+  "version": "1.0.0"
+}

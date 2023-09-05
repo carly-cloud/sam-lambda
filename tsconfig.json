@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDirs": [
+      "./src",
+      "./app"
+    ],
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es6",
+    "typeRoots": [
+      "./@types",
+      "./node_modules/@types"
+    ]
+  },
+  "exclude": [
+    ".idea",
+    "coverage",
+    "deploy",
+    ".cache",
+    ".husky",
+    "node_modules",
+    "dist/",
+    "public/",
+    "__tests__/",
+    "./server/**/*.test.ts",
+    "./app/**/*.test.ts"
+  ],
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.d.ts"
+  ]
+}

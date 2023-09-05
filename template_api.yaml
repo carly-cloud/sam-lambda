@@ -1,0 +1,59 @@
+openapi: '3.0.1'
+info:
+  title: 'test api'
+  description: 'test'
+  version: '2.0'
+x-amazon-apigateway-request-validators:
+  full:
+    validateRequestBody: true
+    validateRequestParameters: true
+  'body-only':
+    validateRequestBody: true
+    validateRequestParameters: false
+  'params-only':
+    validateRequestBody: false
+    validateRequestParameters: true
+x-amazon-apigateway-request-validator: params-only
+x-amazon-apigateway-minimum-compression-size: 1024
+x-amazon-apigateway-gateway-responses:
+  DEFAULT_4XX:
+    statusCode: 400
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+  DEFAULT_5XX:
+    statusCode: 400
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+
+paths:
+  /health:
+    get:
+      responses: { }
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${stageVariables.ServerlessLambdaFunctionName}/invocations
+        httpMethod: POST
+        type: aws_proxy
+      x-amazon-apigateway-auth:
+        type: none
+  /car-check:
+    get:
+      responses: { }
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${stageVariables.ServerlessLambdaFunctionName}/invocations
+        httpMethod: POST
+        type: aws_proxy
+      x-amazon-apigateway-auth:
+        type: none
+  /{proxy+}:
+    get:
+      responses: { }
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${stageVariables.ServerlessLambdaFunctionName}/invocations
+        httpMethod: POST
+        type: aws_proxy
+      x-amazon-apigateway-auth:
+        type: none
