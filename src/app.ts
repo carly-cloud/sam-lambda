@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/serverless'
 import bodyParser from 'body-parser'
 import express from 'express'
 import { engine } from 'express-handlebars'
@@ -20,13 +19,6 @@ export class App {
   private initializeMiddlewares() {
     this.app.use(express.static('public'))
 
-    // RequestHandler creates a separate execution context using domains, so that every
-    // transaction/span/breadcrumb is attached to its own Hub instance
-    this.app.use(Sentry.Handlers.requestHandler() as express.RequestHandler)
-
-    // TracingHandler creates a trace for every incoming request
-    this.app.use(Sentry.Handlers.tracingHandler())
-
     this.app.engine(
       'hbs',
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -41,9 +33,6 @@ export class App {
     this.app.use(bodyParser.urlencoded({ extended: true }))
 
     this.initializeRoutes()
-
-    // The error handler must be before any other error middleware and after all controllers
-    this.app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler)
   }
 
   private initializeRoutes() {

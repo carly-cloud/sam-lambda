@@ -54,40 +54,12 @@
     "webpack-bundle-analyzer": "^4.9.0",
     "webpack-cli": "^5.1.4"
   },
-  "lint-staged": {
-    "app/**/*.scss": [
-      "stylelint"
-    ],
-    "app/**/*.ts": [
-      "eslint",
-      "prettier"
-    ],
-    "src/**/*.ts": [
-      "eslint",
-      "prettier"
-    ],
-    "src/*.ts": [
-      "eslint",
-      "prettier"
-    ]
-  },
-  "name": "lambda-html-report-generator",
+  "name": "test",
   "scripts": {
     "build": "tsc",
     "dev": "sam local start-api --env-vars env.json",
-    "fix": "npm run fix:prettier && npm run fix:eslint && npm run fix:stylelint",
-    "fix:eslint": "eslint --fix src/**/*.ts",
-    "fix:prettier": "prettier --write src/**/*.ts",
-    "fix:stylelint": "stylelint --fix 'app/**/*.scss'",
-    "lint": "lint:eslint && lint:prettier",
-    "lint:eslint": "eslint *.js",
-    "lint:prettier": "prettier --check **/**.{ts,js}",
-    "prepare": "npx husky install",
-    "test": "jest src/**/*.test.ts --detectOpenHandles --coverage --collectCoverage --bail  --ci --reporters=default --reporters=jest-junit --watchAll=false",
-    "update": "./node_modules/npm-check/bin/cli.js --update-all",
-    "watch": "concurrently --names \"Backend,Client\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run watch:backend\" \"npm run watch:client\"",
-    "watch:backend": "tsc -w",
-    "watch:client": "npx webpack --config webpack.config.js --mode=development --watch"
+    "watch": "concurrently --names \"Backend,Client\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run watch:backend\"",
+    "watch:backend": "tsc -w"
   },
   "version": "1.0.0"
 }
